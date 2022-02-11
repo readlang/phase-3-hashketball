@@ -126,4 +126,106 @@ def game_hash
   }
 end
 
-# Write code here
+
+def num_points_scored name
+  query = game_hash[:home][:players].find{|x| x[:player_name] == name }
+
+  if query != nil #if name is included in home
+    return query[:points]
+  end
+
+  query = game_hash[:away][:players].find{|x| x[:player_name] == name }
+
+  if query != nil #if name is included in away
+    return query[:points]
+  end
+
+  return "name not included in teams"
+end
+
+
+def shoe_size name
+  query = game_hash[:home][:players].find{|x| x[:player_name] == name }
+
+  if query != nil #if name is included in home
+    return query[:shoe]
+  end
+
+  query = game_hash[:away][:players].find{|x| x[:player_name] == name }
+
+  if query != nil #if name is included in away
+    return query[:shoe]
+  end
+
+  return "name not included in teams"
+end
+
+
+def team_colors team_name_entry
+  # game_hash.select{ |key, value| value[:team_name] == team_name_entry } [:home][:colors]
+  array = []
+  game_hash.each do |key, value|  
+    if value[:team_name] == team_name_entry
+      array = value[:colors]
+    end
+
+  end
+  array
+end
+
+
+def team_names 
+  array = []
+  game_hash.each do |k, v|
+    array.push( v[:team_name] )
+  end
+  array
+end
+
+#p team_names
+
+def player_numbers team_name
+  array = []
+  game_hash.each do |k, v|
+    if v[:team_name] == team_name
+      v[:players].each {|i| array.push(i[:number]) }
+    end
+  end
+  array
+end
+
+#p player_numbers "Brooklyn Nets"
+
+def player_stats name
+  game_hash.each do |k, v|
+    v[:players].each do |x|
+      if x[:player_name] == name
+        return x
+      end
+    end
+  end
+
+end
+
+# pp player_stats "Alan Anderson"
+
+def big_shoe_rebounds 
+  largest_shoe_player = ""
+  largest_shoe_player_rebounds = 0
+  largest_shoe_size = 0
+
+  game_hash.each do |k, v|
+    v[:players].each do |i|
+      if i[:shoe] > largest_shoe_size
+        largest_shoe_player = i[:player_name]
+        largest_shoe_player_rebounds = i[:rebounds]
+        largest_shoe_size = i[:shoe]
+      end
+    end
+  end
+  puts largest_shoe_player
+  largest_shoe_player_rebounds
+end
+
+
+p big_shoe_rebounds
